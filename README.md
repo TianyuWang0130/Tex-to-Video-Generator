@@ -1,24 +1,31 @@
-# Tex-to-Video-Generator
-AnimateDiffPipeline
+# Text-to-Video-Generator
 
-A comprehensive pipeline for text-to-video generation, fine-tuning, deployment, and evaluation using AnimateDiff-Lightning, built on top of HuggingFace's Diffusers library.
+# AnimateDiffPipeline
 
-Features
+A comprehensive pipeline for text-to-video generation, fine-tuning, deployment, and evaluation using [AnimateDiff-Lightning](https://huggingface.co/ByteDance/AnimateDiff-Lightning), built on top of HuggingFace's Diffusers library.
 
-Generate animations from text prompts using AnimateDiff
+---
 
-Fine-tune MotionAdapter with the YouCook2 dataset
+## Features
 
-Deploy a Gradio-based web app for interactive generation
+- Generate animations from text prompts using AnimateDiff
+- Fine-tune MotionAdapter with the YouCook2 dataset
+- Deploy a Gradio-based web app for interactive generation
+- Evaluate animation quality using LPIPS, SSIM, PSNR, FVD, and CLIP score
 
-Evaluate animation quality using LPIPS, SSIM, PSNR, FVD, and CLIP score
+---
 
-Installation
+## Installation
 
+```bash
 pip install --upgrade transformers accelerate diffusers imageio-ffmpeg safetensors gradio lpips piq
+```
 
-Basic Usage
+---
 
+## Basic Usage
+
+```python
 from diffusers import AnimateDiffPipeline, MotionAdapter, EulerDiscreteScheduler
 from diffusers.utils import export_to_gif
 from huggingface_hub import hf_hub_download
@@ -41,70 +48,86 @@ pipe.scheduler = EulerDiscreteScheduler.from_config(pipe.scheduler.config, times
 
 output = pipe(prompt="crack two eggs into a bowl", guidance_scale=1.0, num_inference_steps=step)
 export_to_gif(output.frames[0], "animation.gif")
+```
 
-Fine-tuning
+---
+
+## Fine-tuning
 
 Fine-tune the MotionAdapter using the YouCook2 dataset.
 
-Dataset
+### Dataset
 
+```python
 class YouCook2Dataset(Dataset):
     # Parses the YouCook2 annotations and loads frame-level data
     # Selects the first 8 frames per caption segment
+```
 
-Training Loop
+### Training Loop
 
+```python
 for epoch in range(num_epochs):
     for batch in dataloader:
         frames, captions = batch
         # Preprocess, forward pass, compute SmoothL1 loss, backpropagate
+```
 
 Model is saved to:
-
+```bash
 /content/drive/.../motion_adapter_finetuned_4.6.pth
+```
 
-Gradio Web App
+---
+
+## Gradio Web App
 
 Launch a web interface to generate animations interactively.
 
+```python
 def generate_animation(prompt):
     # Generates GIF using the fine-tuned pipeline
 
 interface = gr.Interface(fn=generate_animation, inputs=gr.Textbox(), outputs=gr.Image(type="filepath"))
 interface.launch(share=True)
+```
 
-Evaluation
+---
 
-Metrics Used:
+## Evaluation
 
-LPIPS (Perceptual similarity)
+### Metrics Used:
+- **LPIPS** (Perceptual similarity)
+- **SSIM** (Structural Similarity Index)
+- **PSNR** (Peak Signal-to-Noise Ratio)
+- **FVD** (Fréchet Video Distance - simplified)
+- **CLIP Score** (Text-image alignment)
 
-SSIM (Structural Similarity Index)
-
-PSNR (Peak Signal-to-Noise Ratio)
-
-FVD (Fréchet Video Distance - simplified)
-
-CLIP Score (Text-image alignment)
-
+```python
 # Sample:
 clip_score = compute_clip_score(prompt, Image.fromarray(generated_frame))
 fvd_score = fvd_lightweight(real_frames, generated_frames)
+```
 
 Results can be stored in a pandas DataFrame and printed as a table.
 
-Acknowledgements
+---
 
-ByteDance/AnimateDiff-Lightning
+## Acknowledgements
 
-HuggingFace Diffusers
+- [ByteDance/AnimateDiff-Lightning](https://huggingface.co/ByteDance/AnimateDiff-Lightning)
+- [HuggingFace Diffusers](https://github.com/huggingface/diffusers)
+- [YouCook2 Dataset](https://github.com/ranjaykrishna/dense-video-captioning)
 
-YouCook2 Dataset
+---
 
-License
+## License
 
 This repository is intended for academic and research purposes only. Please refer to the respective licenses of the models and datasets used.
 
-Contact
+---
+
+## Contact
 
 For questions or contributions, please open an issue or reach out via GitHub Discussions.
+
