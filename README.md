@@ -117,7 +117,7 @@ Results can be stored in a pandas DataFrame and printed as a table.
 
 - [ByteDance/AnimateDiff-Lightning](https://huggingface.co/ByteDance/AnimateDiff-Lightning)
 - [HuggingFace Diffusers](https://github.com/huggingface/diffusers)
-- [YouCook2 Dataset](https://github.com/ranjaykrishna/dense-video-captioning)
+- [YouCook2 Dataset](http://youcook2.eecs.umich.edu/)
 
 ---
 
